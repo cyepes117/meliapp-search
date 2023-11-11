@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.meliapp.search.data"
     compileSdk = 33
 
     defaultConfig {
@@ -49,5 +49,5 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.0")
 
     implementation("io.insert-koin:koin-core:3.5.0")
-    implementation("org.koin:koin-android:3.5.0")
+    implementation("io.insert-koin:koin-android:3.5.0")
 }

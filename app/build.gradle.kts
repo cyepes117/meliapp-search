@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.meliapp"
+    namespace = "com.meliapp.search"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.meliapp"
+        applicationId = "com.meliapp.search"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -69,4 +69,7 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":domain"))
+
+    implementation("io.insert-koin:koin-core:3.5.0")
+    implementation("io.insert-koin:koin-android:3.5.0")
 }
