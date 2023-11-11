@@ -17,3 +17,4 @@ rootProject.name = "meli app"
 include(":app")
 include(":domain")
 include(":data")
+include(":presentation")
