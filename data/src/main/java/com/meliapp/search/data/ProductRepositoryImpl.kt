@@ -17,7 +17,7 @@ class ProductRepositoryImpl(
     override suspend fun getProductList(productName: String): List<Product> =
         withContext(dispatcher) {
             val localProducts = localDataSource.getProductList(productName)
-            if (localProducts != null) {
+            if (!localProducts.isNullOrEmpty()) {
                 return@withContext localProducts.map { productMapper.toDomainEntity(it) }
             }
 
