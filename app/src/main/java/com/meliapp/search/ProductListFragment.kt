@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import org.koin.android.ext.android.get
 
 class ProductListFragment : Fragment() {
 
-    private val viewModel: ProductEventRouter by viewModels()
+    private val viewModel: ProductEventRouter by lazy { get() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
