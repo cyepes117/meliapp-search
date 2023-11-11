@@ -4,33 +4,44 @@ import com.meliapp.search.data.api.RemoteProductDataSource
 import com.meliapp.search.data.local.LocalProductDataSource
 import com.meliapp.search.domain.entities.Product
 import com.meliapp.search.domain.repository.ProductRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ProductRepositoryImpl(
     private val remoteDataSource: RemoteProductDataSource,
     private val localDataSource: LocalProductDataSource,
-    private val productMapper: ProductMapper
+    private val productMapper: ProductMapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ProductRepository {
-    override suspend fun getProductList(): List<Product> {
-        val remoteResults = remoteDataSource.getProductList()
-        val localEntities = remoteResults.map { productMapper.toLocalEntity(it) }
-        localDataSource.saveProductList(localEntities)
-        return remoteResults.map { productMapper.toDomainEntity(it) }
-    }
+    override suspend fun getProductList(productName: String): List<Product> =
+        withContext(dispatcher) {
+            val localProducts = localDataSource.getProductList(productName)
+            if (localProducts != null) {
+                return@withContext localProducts.map { productMapper.toDomainEntity(it) }
+            }
 
-    override suspend fun getProductDetails(productId: Int): Product {
-        val localResult = localDataSource.getProductDetails(productId)
-        if (localResult != null) {
-            return productMapper.toDomainEntity(localResult)
+            val remoteProducts = remoteDataSource.getProductList(productName)
+            localDataSource.saveProductList(remoteProducts.map { productMapper.toLocalEntity(it) })
+
+            return@withContext remoteProducts.map { productMapper.toDomainEntity(it) }
         }
 
-        val remoteResult = remoteDataSource.getProductDetails(productId)
-        if (remoteResult != null) {
-            localDataSource.saveProductDetails(productMapper.toLocalEntity(remoteResult))
-            return productMapper.toDomainEntity(remoteResult)
-        } else {
-            // Handle the case when the product details are not available
-            throw NoSuchElementException("Product details not found for productId: $productId")
+    override suspend fun getProductDetails(productId: Int): Product =
+        withContext(dispatcher) {
+            val localProduct = localDataSource.getProductDetails(productId)
+            if (localProduct != null) {
+                return@withContext productMapper.toDomainEntity(localProduct)
+            }
+
+            val remoteResult = remoteDataSource.getProductDetails(productId)
+            if (remoteResult != null) {
+                localDataSource.saveProductDetails(productMapper.toLocalEntity(remoteResult))
+                return@withContext productMapper.toDomainEntity(remoteResult)
+            } else {
+                // Handle the case when the product details are not available
+                throw NoSuchElementException("Product details not found for productId: $productId")
+            }
         }
-    }
 }
 

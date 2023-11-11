@@ -9,8 +9,8 @@ import com.meliapp.search.data.local.entities.ProductEntity
 @Dao
 interface ProductDao {
 
-    @Query("SELECT * FROM product")
-    suspend fun getProductList(): List<ProductEntity>
+    @Query("SELECT * FROM product WHERE name LIKE :productName")
+    suspend fun getProductList(productName: String): List<ProductEntity>?
 
     @Query("SELECT * FROM product WHERE id = :productId")
     suspend fun getProductDetails(productId: Int): ProductEntity?

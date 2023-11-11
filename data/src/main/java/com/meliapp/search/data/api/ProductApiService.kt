@@ -5,8 +5,8 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ProductApiService {
-    @GET("products")
-    suspend fun getProductList(): List<ProductDto>
+    @GET("products/{productName}")
+    suspend fun getProductList(@Path("productName") productName: String): List<ProductDto>
 
     @GET("products/{productId}")
     suspend fun getProductDetails(@Path("productId") productId: Int): ProductDto?
