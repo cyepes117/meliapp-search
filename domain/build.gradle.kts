@@ -11,3 +11,7 @@ java {
 kotlin {
     jvmToolchain(17)
 }
+
+dependencies {
+    api("io.insert-koin:koin-core:3.5.0")
+}
