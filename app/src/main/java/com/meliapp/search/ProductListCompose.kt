@@ -46,7 +46,6 @@ fun ProductListFragmentContent(
             onClearQuery = onClearQuery
         )
 
-
         // Product list
         ProductList(
             products = products,
