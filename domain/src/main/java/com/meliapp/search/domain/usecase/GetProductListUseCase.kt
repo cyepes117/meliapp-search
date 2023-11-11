@@ -5,7 +5,7 @@ import com.meliapp.search.domain.repository.ProductRepository
 
 interface GetProductListUseCase : UseCase<String, List<Product>>
 
-class GetProductListUseCaseImpl(
+internal class GetProductListUseCaseImpl(
     private val productRepository: ProductRepository
 ) : GetProductListUseCase {
     override suspend operator fun invoke(input: String): List<Product> {

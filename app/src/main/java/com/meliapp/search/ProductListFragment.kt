@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 
 class ProductListFragment : Fragment() {
 
-    private val viewModel: ProductViewModel by viewModels()
+    private val viewModel: ProductEventRouter by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
