@@ -4,5 +4,5 @@ import com.meliapp.search.domain.entities.Product
 
 interface ProductRepository {
     suspend fun getProductList(productName: String): List<Product>
-    suspend fun getProductDetails(productId: Int): Product
+    suspend fun getProductDetails(productId: String): Product
 }

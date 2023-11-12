@@ -178,11 +178,11 @@ fun ProductListItem(
                 .padding(16.dp)
         ) {
             Text(
-                text = product.name,
+                text = product.title,
                 style = MaterialTheme.typography.headlineSmall
             )
             Text(
-                text = product.description,
+                text = product.thumbnail,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
@@ -201,8 +201,8 @@ fun ProductListPreview() {
     ProductListFragmentContent (
         query = "Mock Query",
         products = listOf(
-            Product(id = 1, name = "Product 1", description = "", price = 20.0),
-            Product(id = 2, name = "Product 2", description = "", price = 20.0),
+            Product(id = "1", title = "Product 1", thumbnail = "", price = 20.0),
+            Product(id = "2", title = "Product 2", thumbnail = "", price = 20.0),
             // Add more mock products as needed
         ),
         onProductSelected = { /* Handle product selection in preview */ },

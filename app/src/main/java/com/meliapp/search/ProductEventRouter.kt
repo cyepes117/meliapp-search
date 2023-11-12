@@ -94,7 +94,7 @@ internal class ProductViewModel(
         }
     }
 
-    private suspend fun getProductDetailsAndEmitEvents(productId: Int) {
+    private suspend fun getProductDetailsAndEmitEvents(productId: String) {
         val productDetails = getProductDetailsUseCase(productId)
         _viewModelState.emit(
             _viewModelState.value.copy(

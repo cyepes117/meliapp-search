@@ -4,7 +4,7 @@ import com.meliapp.search.data.local.entities.ProductEntity
 
 interface LocalProductDataSource {
     suspend fun getProductList(productName: String): List<ProductEntity>?
-    suspend fun getProductDetails(productId: Int): ProductEntity?
+    suspend fun getProductDetails(productId: String): ProductEntity?
     suspend fun saveProductList(products: List<ProductEntity>)
     suspend fun saveProductDetails(product: ProductEntity)
 }
@@ -15,7 +15,7 @@ internal class LocalProductDataSourceImpl(private val productDao: ProductDao) :
         return productDao.getProductList(productName)
     }
 
-    override suspend fun getProductDetails(productId: Int): ProductEntity? {
+    override suspend fun getProductDetails(productId: String): ProductEntity? {
         return productDao.getProductDetails(productId)
     }
 

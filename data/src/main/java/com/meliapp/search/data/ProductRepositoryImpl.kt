@@ -27,7 +27,7 @@ class ProductRepositoryImpl(
             return@withContext remoteProducts.map { productMapper.toDomainEntity(it) }
         }
 
-    override suspend fun getProductDetails(productId: Int): Product =
+    override suspend fun getProductDetails(productId: String): Product =
         withContext(dispatcher) {
             val localProduct = localDataSource.getProductDetails(productId)
             if (localProduct != null) {

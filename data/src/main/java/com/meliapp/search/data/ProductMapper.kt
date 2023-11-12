@@ -15,8 +15,8 @@ class ProductMapperImpl : ProductMapper {
     override fun toLocalEntity(product: Product): ProductEntity {
         return ProductEntity(
             id = product.id,
-            name = product.name,
-            description = product.description,
+            title = product.title,
+            thumbnail = product.thumbnail,
             price = product.price
         )
     }
@@ -24,8 +24,8 @@ class ProductMapperImpl : ProductMapper {
     override fun toLocalEntity(productDto: ProductDto): ProductEntity {
         return ProductEntity(
             id = productDto.id,
-            name = productDto.name,
-            description = productDto.description,
+            title = productDto.title,
+            thumbnail = productDto.thumbnail,
             price = productDto.price
         )
     }
@@ -33,8 +33,8 @@ class ProductMapperImpl : ProductMapper {
     override fun toDomainEntity(productEntity: ProductEntity): Product {
         return Product(
             id = productEntity.id,
-            name = productEntity.name,
-            description = productEntity.description,
+            title = productEntity.title,
+            thumbnail = productEntity.thumbnail,
             price = productEntity.price
         )
     }
@@ -42,8 +42,8 @@ class ProductMapperImpl : ProductMapper {
     override fun toDomainEntity(productDto: ProductDto): Product {
         return Product(
             id = productDto.id,
-            name = productDto.name,
-            description = productDto.description,
+            title = productDto.title,
+            thumbnail = productDto.thumbnail,
             price = productDto.price
         )
     }

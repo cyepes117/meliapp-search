@@ -1,8 +1,8 @@
 package com.meliapp.search.domain.entities
 
 data class Product(
-    val id: Int,
-    val name: String,
-    val description: String,
+    val id: String,
+    val title: String,
+    val thumbnail: String,
     val price: Double,
 )
