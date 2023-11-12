@@ -15,3 +15,8 @@ data class ProductDto(
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("price") val price: Double,
 )
+
+data class MultiGetResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("body") val result: ProductDto,
+)

@@ -2,6 +2,7 @@ package com.meliapp.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.meliapp.search.data.api.ApiError
 import com.meliapp.search.domain.entities.Product
 import com.meliapp.search.domain.usecase.GetProductDetailsUseCase
 import com.meliapp.search.domain.usecase.GetProductListUseCase
@@ -21,7 +22,7 @@ internal interface ProductEventRouter : StatefulEventRouter<
         sealed class ProductList : ViewEvent {
             data class Search(val productName: String) : ProductList()
             data class SelectProduct(val product: Product) : ProductList()
-            data object Clear: ProductList()
+            data object Clear : ProductList()
         }
 
         sealed class ProductDetail : ViewEvent {
@@ -44,7 +45,15 @@ internal interface ProductEventRouter : StatefulEventRouter<
         val query: String,
         val results: List<Product>,
         val selectedResult: Product?,
-    ) : StatefulEventRouter.State
+        val errorState: ErrorState? = null,
+    ) : StatefulEventRouter.State {
+
+        data class ErrorState(
+            val message: String,
+            val isApiError: Boolean = false,
+            val isNotFoundError: Boolean = false,
+        )
+    }
 }
 
 internal class ProductViewModel(
@@ -52,13 +61,8 @@ internal class ProductViewModel(
     private val getProductDetailsUseCase: GetProductDetailsUseCase
 ) : ViewModel(), ProductEventRouter {
 
-    private val _viewModelState = MutableStateFlow(
-        ProductEventRouter.State(
-            query = "",
-            results = emptyList(),
-            selectedResult = null,
-        )
-    )
+
+    private val _viewModelState = MutableStateFlow(DEFAULT_STATE)
     override val viewModelState: StateFlow<ProductEventRouter.State>
         get() = _viewModelState
     private val _viewModelEvents = MutableSharedFlow<ProductEventRouter.ViewModelEvent>()
@@ -80,46 +84,138 @@ internal class ProductViewModel(
         viewModelScope.launch {
             viewEvents.collect { viewEvent ->
                 when (viewEvent) {
-                    ProductEventRouter.ViewEvent.ProductDetail.Buy -> TODO()
-                    ProductEventRouter.ViewEvent.ProductDetail.ContactStore -> TODO()
+                    is ProductEventRouter.ViewEvent.ProductDetail.Buy -> TODO()
+                    is ProductEventRouter.ViewEvent.ProductDetail.ContactStore -> TODO()
                     is ProductEventRouter.ViewEvent.ProductList.Search ->
                         getProductListAndEmitEvents(viewEvent.productName)
 
                     is ProductEventRouter.ViewEvent.ProductList.SelectProduct ->
                         getProductDetailsAndEmitEvents(viewEvent.product.id)
 
-                    ProductEventRouter.ViewEvent.ProductList.Clear -> TODO()
+                    is ProductEventRouter.ViewEvent.ProductList.Clear ->
+                        _viewModelState.emit(DEFAULT_STATE)
                 }
             }
         }
     }
 
     private suspend fun getProductDetailsAndEmitEvents(productId: String) {
-        val productDetails = getProductDetailsUseCase(productId)
-        _viewModelState.emit(
-            _viewModelState.value.copy(
-                selectedResult = productDetails,
-            )
-        )
-        _viewModelEvents.emit(
-            ProductEventRouter.ViewModelEvent.ProductDetail.ShowProductDetail(
-                product = productDetails,
-            )
+        getProductDetailsUseCase(productId).fold(
+            ifLeft = { error ->
+                when (error) {
+                    is ApiError.NotFoundError -> {
+                        _viewModelState.emit(
+                            _viewModelState.value.copy(
+                                errorState = ProductEventRouter.State.ErrorState(
+                                    message = "No product detail found",
+                                    isNotFoundError = true,
+                                ),
+                            )
+                        )
+                    }
+
+                    is ApiError.HttpError,
+                    is ApiError.NetworkError -> {
+                        _viewModelState.emit(
+                            _viewModelState.value.copy(
+                                errorState = ProductEventRouter.State.ErrorState(
+                                    message = "Error with connectivity",
+                                    isApiError = true,
+                                ),
+                            )
+                        )
+                    }
+
+                    else -> {
+                        _viewModelState.emit(
+                            _viewModelState.value.copy(
+                                errorState = ProductEventRouter.State.ErrorState(
+                                    message = "Something really wrong is happening",
+                                    isApiError = true,
+                                ),
+                            )
+                        )
+                    }
+                }
+
+            },
+            ifRight = { product ->
+                _viewModelState.emit(
+                    _viewModelState.value.copy(
+                        selectedResult = product,
+                    )
+                )
+
+                _viewModelEvents.emit(
+                    ProductEventRouter.ViewModelEvent.ProductDetail.ShowProductDetail(
+                        product = product,
+                    )
+                )
+            },
         )
     }
 
     private suspend fun getProductListAndEmitEvents(productName: String) {
-        val productList = getProductListUseCase(productName)
-        _viewModelState.emit(
-            _viewModelState.value.copy(
-                query = productName,
-                results = productList,
-            )
+        getProductListUseCase(productName).fold(
+            ifLeft = { error ->
+                when (error) {
+                    is ApiError.NotFoundError -> {
+                        _viewModelState.emit(
+                            _viewModelState.value.copy(
+                                errorState = ProductEventRouter.State.ErrorState(
+                                    message = "No products found",
+                                    isNotFoundError = true,
+                                ),
+                            )
+                        )
+                    }
+
+                    is ApiError.HttpError,
+                    is ApiError.NetworkError -> {
+                        _viewModelState.emit(
+                            _viewModelState.value.copy(
+                                errorState = ProductEventRouter.State.ErrorState(
+                                    message = "Error with connectivity",
+                                    isApiError = true,
+                                ),
+                            )
+                        )
+                    }
+
+                    else -> {
+                        _viewModelState.emit(
+                            _viewModelState.value.copy(
+                                errorState = ProductEventRouter.State.ErrorState(
+                                    message = "Something really wrong is happening",
+                                    isApiError = true,
+                                ),
+                            )
+                        )
+                    }
+                }
+            },
+            ifRight = { productList ->
+                _viewModelState.emit(
+                    _viewModelState.value.copy(
+                        query = productName,
+                        results = productList,
+                    )
+                )
+
+                _viewModelEvents.emit(
+                    ProductEventRouter.ViewModelEvent.ProductList.ShowList(
+                        products = productList,
+                    )
+                )
+            },
         )
-        _viewModelEvents.emit(
-            ProductEventRouter.ViewModelEvent.ProductList.ShowList(
-                products = productList,
-            )
+    }
+
+    private companion object {
+        val DEFAULT_STATE = ProductEventRouter.State(
+            query = "",
+            results = emptyList(),
+            selectedResult = null,
         )
     }
 }

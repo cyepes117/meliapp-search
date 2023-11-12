@@ -3,6 +3,7 @@ package com.meliapp.search.data.di
 import com.meliapp.search.data.ProductMapper
 import com.meliapp.search.data.ProductMapperImpl
 import com.meliapp.search.data.ProductRepositoryImpl
+import com.meliapp.search.data.api.EitherCallAdapterFactory
 import com.meliapp.search.data.api.ProductApiService
 import com.meliapp.search.data.api.RemoteProductDataSource
 import com.meliapp.search.data.api.RemoteProductDataSourceImpl
@@ -60,6 +61,7 @@ fun getDataModule() = module {
             .baseUrl("https://api.mercadolibre.com/")
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(EitherCallAdapterFactory())
             .build()
             .create(ProductApiService::class.java)
     } bind ProductApiService::class
