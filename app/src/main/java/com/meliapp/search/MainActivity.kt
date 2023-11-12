@@ -8,7 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.meliapp.search.ui.theme.MeliAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
@@ -34,9 +39,7 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                         onQueryChanged = { query ->
-                            viewModel.publishViewEvent(
-                                ProductEventRouter.ViewEvent.ProductList.Search(productName = query)
-                            )
+                            onQueryChangedWithDebounce(query)
                         },
                         onClearQuery = {
                             viewModel.publishViewEvent(
@@ -48,5 +51,29 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
+    private val onQueryChangedWithDebounce: (String) -> Unit by lazy {
+        debounce(
+            coroutineScope = lifecycleScope
+        ) { query ->
+            viewModel.publishViewEvent(
+                ProductEventRouter.ViewEvent.ProductList.Search(productName = query)
+            )
+        }
+    }
+
+    private fun <T> debounce(
+        waitMs: Long = 1000L,
+        coroutineScope: CoroutineScope,
+        destinationFunction: (T) -> Unit
+    ): (T) -> Unit {
+        var debounceJob: Job? = null
+        return { param: T ->
+            debounceJob?.cancel()
+            debounceJob = coroutineScope.launch {
+                delay(waitMs)
+                destinationFunction(param)
+            }
+        }
+    }
+}
