@@ -1,5 +1,6 @@
 package com.meliapp.search.data.di
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.meliapp.search.data.ProductMapper
 import com.meliapp.search.data.ProductMapperImpl
 import com.meliapp.search.data.ProductRepositoryImpl
@@ -11,6 +12,10 @@ import com.meliapp.search.data.local.LocalProductDataSource
 import com.meliapp.search.data.local.LocalProductDataSourceImpl
 import com.meliapp.search.data.local.ProductDao
 import com.meliapp.search.domain.repository.ProductRepository
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -43,8 +48,25 @@ fun getDataModule() = module {
     } bind ProductDao::class
 
     single {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+    } bind OkHttpClient::class
+
+    single {
+        val contentType = "application/json".toMediaType()
+        val json = Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+        }
         Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
+            .baseUrl("https://api.mercadolibre.com/")
+            .client(get())
+            .addConverterFactory(json.asConverterFactory(contentType))
             .build()
             .create(ProductApiService::class.java)
     } bind ProductApiService::class
