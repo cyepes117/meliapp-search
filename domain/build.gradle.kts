@@ -14,4 +14,5 @@ kotlin {
 
 dependencies {
     implementation("io.insert-koin:koin-core:3.5.0")
+    implementation("io.arrow-kt:arrow-core:1.2.0")
 }
