@@ -1,7 +1,7 @@
 package com.meliapp.search.di
 
-import com.meliapp.search.ProductEventRouter
-import com.meliapp.search.ProductViewModel
+import com.meliapp.search.presentation.ProductEventRouter
+import com.meliapp.search.presentation.ProductViewModel
 import org.koin.dsl.bind
 import org.koin.dsl.module
 

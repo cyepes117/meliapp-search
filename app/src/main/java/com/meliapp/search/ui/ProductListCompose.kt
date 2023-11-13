@@ -1,4 +1,4 @@
-package com.meliapp.search
+package com.meliapp.search.ui
 
 import android.content.Context
 import android.widget.Toast
@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.meliapp.search.R
 import com.meliapp.search.domain.entities.Product
 
 @Composable

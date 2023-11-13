@@ -1,4 +1,4 @@
-package com.meliapp.search
+package com.meliapp.search.base
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow

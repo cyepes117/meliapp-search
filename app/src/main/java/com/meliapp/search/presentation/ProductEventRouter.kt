@@ -1,7 +1,9 @@
-package com.meliapp.search
+package com.meliapp.search.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.meliapp.search.base.EventRouter
+import com.meliapp.search.base.StatefulEventRouter
 import com.meliapp.search.data.api.ApiError
 import com.meliapp.search.domain.entities.Product
 import com.meliapp.search.domain.usecase.GetProductDetailsUseCase
