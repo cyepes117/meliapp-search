@@ -3,7 +3,7 @@ package com.meliapp.search.data.di
 import com.meliapp.search.data.ProductMapper
 import com.meliapp.search.data.ProductMapperImpl
 import com.meliapp.search.data.ProductRepositoryImpl
-import com.meliapp.search.data.api.EitherCallAdapterFactory
+import com.meliapp.search.data.api.adapter.EitherCallAdapterFactory
 import com.meliapp.search.data.api.ProductApiService
 import com.meliapp.search.data.api.RemoteProductDataSource
 import com.meliapp.search.data.api.RemoteProductDataSourceImpl

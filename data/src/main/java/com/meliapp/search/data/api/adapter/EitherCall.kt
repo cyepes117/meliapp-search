@@ -1,7 +1,8 @@
-package com.meliapp.search.data.api
+package com.meliapp.search.data.api.adapter
 
 import arrow.core.Either
 import arrow.core.left
+import com.meliapp.search.data.api.ApiError
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call

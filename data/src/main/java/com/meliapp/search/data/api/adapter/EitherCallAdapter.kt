@@ -1,6 +1,7 @@
-package com.meliapp.search.data.api
+package com.meliapp.search.data.api.adapter
 
 import arrow.core.Either
+import com.meliapp.search.data.api.ApiError
 import retrofit2.Call
 import retrofit2.CallAdapter
 import java.lang.reflect.Type
