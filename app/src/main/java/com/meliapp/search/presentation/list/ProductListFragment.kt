@@ -1,4 +1,4 @@
-package com.meliapp.search.presentation
+package com.meliapp.search.presentation.list
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.lifecycleScope
-import com.meliapp.search.ui.ProductListFragmentContent
+import com.meliapp.search.presentation.ProductEventRouter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

@@ -1,4 +1,4 @@
-package com.meliapp.search.ui
+package com.meliapp.search.presentation.list
 
 import android.content.Context
 import android.widget.Toast
@@ -47,7 +47,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.meliapp.search.R
 import com.meliapp.search.domain.entities.Product
 
@@ -66,7 +65,7 @@ fun ProductListFragmentContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.White)
     ) {
         SearchBar(
             query = query,
@@ -224,7 +223,6 @@ fun ProductList(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ProductListItem(
     product: Product,

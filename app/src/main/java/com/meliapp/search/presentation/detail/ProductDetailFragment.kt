@@ -1,13 +1,13 @@
-package com.meliapp.search.presentation
+package com.meliapp.search.presentation.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.meliapp.search.domain.entities.Product
-import com.meliapp.search.ui.ProductListItem
+import com.meliapp.search.presentation.ProductEventRouter
 import org.koin.android.ext.android.get
 
 class ProductDetailFragment : Fragment() {
@@ -21,8 +21,8 @@ class ProductDetailFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                ProductListItem(
-                    product = Product(id = "1", title = "Product 1", thumbnail = "", price = 20.0),
+                ProductDetail(
+                    product = viewModel.viewModelState.collectAsState().value.selectedResult!!,
                     onProductSelected = {},
                 )
             }

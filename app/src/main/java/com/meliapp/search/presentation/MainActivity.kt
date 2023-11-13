@@ -4,11 +4,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavType
 import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
 import com.meliapp.search.R
+import com.meliapp.search.presentation.detail.ProductDetailFragment
+import com.meliapp.search.presentation.list.ProductListFragment
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
