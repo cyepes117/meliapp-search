@@ -36,13 +36,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.meliapp.search.R
 import com.meliapp.search.domain.entities.Product
 
@@ -219,6 +224,7 @@ fun ProductList(
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ProductListItem(
     product: Product,
@@ -230,19 +236,40 @@ fun ProductListItem(
             .padding(vertical = 8.dp)
             .clickable { onProductSelected(product) }
     ) {
-        Column(
+        Row(
             modifier = Modifier
-                .padding(16.dp)
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
         ) {
-            Text(
-                text = product.title,
-                style = MaterialTheme.typography.headlineSmall
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(product.thumbnail)
+                    .crossfade(true)
+                    .build(),
+                placeholder = painterResource(R.drawable.ic_launcher_foreground),
+                contentScale = ContentScale.FillBounds,
+                contentDescription = product.title,
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(16.dp)
             )
-            Text(
-                text = "Price: $${product.price}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
+
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = product.title,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Text(
+                    text = "Price: $${product.price}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     }
 }
