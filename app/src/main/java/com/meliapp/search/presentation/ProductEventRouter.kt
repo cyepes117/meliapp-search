@@ -39,7 +39,7 @@ internal interface ProductEventRouter : StatefulEventRouter<
         }
 
         sealed class ProductDetail : ViewModelEvent {
-            data class ShowProductDetail(val product: Product) : ProductDetail()
+            data object ShowProductDetail : ProductDetail()
         }
     }
 
@@ -145,11 +145,7 @@ internal class ProductViewModel(
                     )
                 )
 
-                _viewModelEvents.emit(
-                    ProductEventRouter.ViewModelEvent.ProductDetail.ShowProductDetail(
-                        product = product,
-                    )
-                )
+                _viewModelEvents.emit(ProductEventRouter.ViewModelEvent.ProductDetail.ShowProductDetail)
             },
         )
     }

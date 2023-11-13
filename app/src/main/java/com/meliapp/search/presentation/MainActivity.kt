@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 .collect { viewModelEvent ->
                     when (viewModelEvent) {
                         is ProductEventRouter.ViewModelEvent.ProductDetail.ShowProductDetail -> {
-                            navController.navigate("${NavRoutes.PRODUCT_DETAIL}/${viewModelEvent.product.id}")
+                            navController.navigate(NavRoutes.PRODUCT_DETAIL)
                         }
 
                         is ProductEventRouter.ViewModelEvent.ProductList.ShowList -> {
@@ -51,11 +51,7 @@ class MainActivity : AppCompatActivity() {
         ) {
             fragment<ProductListFragment>(NavRoutes.PRODUCT_LIST)
 
-            fragment<ProductDetailFragment>("${NavRoutes.PRODUCT_DETAIL}/{${NavArguments.PRODUCT_ID}}") {
-                argument(NavArguments.PRODUCT_ID) {
-                    type = NavType.StringType
-                }
-            }
+            fragment<ProductDetailFragment>(NavRoutes.PRODUCT_DETAIL)
         }
     }
 
@@ -64,8 +60,4 @@ class MainActivity : AppCompatActivity() {
 object NavRoutes {
     const val PRODUCT_LIST = "PRODUCT_LIST"
     const val PRODUCT_DETAIL = "PRODUCT_DETAIL"
-}
-
-object NavArguments {
-    const val PRODUCT_ID = "PRODUCT_ID"
 }

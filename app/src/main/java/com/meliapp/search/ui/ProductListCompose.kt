@@ -239,11 +239,6 @@ fun ProductListItem(
                 style = MaterialTheme.typography.headlineSmall
             )
             Text(
-                text = product.thumbnail,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
-            Text(
                 text = "Price: $${product.price}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary
