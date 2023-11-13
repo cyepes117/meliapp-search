@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Search feature</string>
+    <string name="product_list_text_empty_state">Type something</string>
+    <string name="product_list_text_loading_state">Loading, please wait.</string>
+    <string name="product_list_text_no_products">No products found</string>
+    <string name="product_list_text_no_connectivity">Error with connectivity</string>
+    <string name="product_list_text_general_error">Something went really wrong</string>
 </resources>

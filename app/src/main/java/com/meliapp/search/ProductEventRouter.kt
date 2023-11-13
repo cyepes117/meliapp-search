@@ -42,18 +42,14 @@ internal interface ProductEventRouter : StatefulEventRouter<
     }
 
     data class State(
-        val query: String,
-        val results: List<Product>,
-        val selectedResult: Product?,
-        val errorState: ErrorState? = null,
-    ) : StatefulEventRouter.State {
-
-        data class ErrorState(
-            val message: String,
-            val isApiError: Boolean = false,
-            val isNotFoundError: Boolean = false,
-        )
-    }
+        val query: String = "",
+        val results: List<Product> = emptyList(),
+        val selectedResult: Product? = null,
+        val isLoading: Boolean = false,
+        val isApiError: Boolean = false,
+        val isNotFoundError: Boolean = false,
+        val isFatalError: Boolean = false,
+    ) : StatefulEventRouter.State
 }
 
 internal class ProductViewModel(
@@ -100,16 +96,20 @@ internal class ProductViewModel(
     }
 
     private suspend fun getProductDetailsAndEmitEvents(productId: String) {
+        _viewModelState.emit(
+            _viewModelState.value.copy(
+                isLoading = true,
+            )
+        )
+
         getProductDetailsUseCase(productId).fold(
             ifLeft = { error ->
                 when (error) {
                     is ApiError.NotFoundError -> {
                         _viewModelState.emit(
                             _viewModelState.value.copy(
-                                errorState = ProductEventRouter.State.ErrorState(
-                                    message = "No product detail found",
-                                    isNotFoundError = true,
-                                ),
+                                isNotFoundError = true,
+                                isLoading = false,
                             )
                         )
                     }
@@ -118,10 +118,8 @@ internal class ProductViewModel(
                     is ApiError.NetworkError -> {
                         _viewModelState.emit(
                             _viewModelState.value.copy(
-                                errorState = ProductEventRouter.State.ErrorState(
-                                    message = "Error with connectivity",
-                                    isApiError = true,
-                                ),
+                                isApiError = true,
+                                isLoading = false,
                             )
                         )
                     }
@@ -129,10 +127,8 @@ internal class ProductViewModel(
                     else -> {
                         _viewModelState.emit(
                             _viewModelState.value.copy(
-                                errorState = ProductEventRouter.State.ErrorState(
-                                    message = "Something really wrong is happening",
-                                    isApiError = true,
-                                ),
+                                isFatalError = true,
+                                isLoading = false,
                             )
                         )
                     }
@@ -143,6 +139,7 @@ internal class ProductViewModel(
                 _viewModelState.emit(
                     _viewModelState.value.copy(
                         selectedResult = product,
+                        isLoading = false,
                     )
                 )
 
@@ -156,16 +153,24 @@ internal class ProductViewModel(
     }
 
     private suspend fun getProductListAndEmitEvents(productName: String) {
+        if (productName.isEmpty()) {
+            return
+        }
+
+        _viewModelState.emit(
+            _viewModelState.value.copy(
+                isLoading = true,
+            )
+        )
+
         getProductListUseCase(productName).fold(
             ifLeft = { error ->
                 when (error) {
                     is ApiError.NotFoundError -> {
                         _viewModelState.emit(
                             _viewModelState.value.copy(
-                                errorState = ProductEventRouter.State.ErrorState(
-                                    message = "No products found",
-                                    isNotFoundError = true,
-                                ),
+                                isNotFoundError = true,
+                                isLoading = false,
                             )
                         )
                     }
@@ -174,10 +179,8 @@ internal class ProductViewModel(
                     is ApiError.NetworkError -> {
                         _viewModelState.emit(
                             _viewModelState.value.copy(
-                                errorState = ProductEventRouter.State.ErrorState(
-                                    message = "Error with connectivity",
-                                    isApiError = true,
-                                ),
+                                isApiError = true,
+                                isLoading = false,
                             )
                         )
                     }
@@ -185,10 +188,8 @@ internal class ProductViewModel(
                     else -> {
                         _viewModelState.emit(
                             _viewModelState.value.copy(
-                                errorState = ProductEventRouter.State.ErrorState(
-                                    message = "Something really wrong is happening",
-                                    isApiError = true,
-                                ),
+                                isFatalError = true,
+                                isLoading = false,
                             )
                         )
                     }
@@ -199,6 +200,7 @@ internal class ProductViewModel(
                     _viewModelState.value.copy(
                         query = productName,
                         results = productList,
+                        isLoading = false,
                     )
                 )
 
@@ -216,6 +218,7 @@ internal class ProductViewModel(
             query = "",
             results = emptyList(),
             selectedResult = null,
+            isLoading = false,
         )
     }
 }

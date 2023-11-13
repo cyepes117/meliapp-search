@@ -23,13 +23,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MeliAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //ProductListFragment()
-
                     ProductListFragmentContent(
                         query = viewModel.viewModelState.collectAsState().value.query,
                         products = viewModel.viewModelState.collectAsState().value.results,
@@ -46,6 +43,10 @@ class MainActivity : ComponentActivity() {
                                 ProductEventRouter.ViewEvent.ProductList.Clear
                             )
                         },
+                        isLoading = viewModel.viewModelState.collectAsState().value.isLoading,
+                        isApiError = viewModel.viewModelState.collectAsState().value.isApiError,
+                        isNotFoundError = viewModel.viewModelState.collectAsState().value.isNotFoundError,
+                        isFatalError = viewModel.viewModelState.collectAsState().value.isFatalError,
                     )
                 }
             }
