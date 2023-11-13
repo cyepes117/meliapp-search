@@ -205,12 +205,6 @@ internal class ProductViewModel(
                         isLoading = false,
                     )
                 )
-
-                _viewModelEvents.emit(
-                    ProductEventRouter.ViewModelEvent.ProductList.ShowList(
-                        products = productList,
-                    )
-                )
             },
         )
     }
