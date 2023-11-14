@@ -1,4 +1,4 @@
-# Sample App Consuming Mercado Libre Services
+# Sample Search App Consuming Mercado Libre Services
 
 ## Overview
 
@@ -28,12 +28,7 @@ The app adheres to the principles of [Clean Architecture](https://blog.cleancode
 
 1. **Separate UI into a Design System Module:**
     - Move UI components, styles, and theme-related code to a separate `design-system` module.
-    - Define a clear API for UI elements that can be reused across different features.
 
 2. **Create a Presentation Module:**
     - Move ViewModels, fragments/activities, and navigation-related components to a new `presentation` module.
     - Focus on keeping this module lightweight and purely concerned with UI logic.
-
-3. **Demo App Module:**
-    - Create an `app-demo` module for the demo application.
-    - Keep this module minimal and only responsible for assembling and running the app.
