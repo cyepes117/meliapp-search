@@ -6,6 +6,7 @@ import com.meliapp.search.base.EventRouter
 import com.meliapp.search.base.StatefulEventRouter
 import com.meliapp.search.data.api.ApiError
 import com.meliapp.search.domain.entities.Product
+import com.meliapp.search.domain.repository.RepositoryError
 import com.meliapp.search.domain.usecase.GetProductDetailsUseCase
 import com.meliapp.search.domain.usecase.GetProductListUseCase
 import kotlinx.coroutines.flow.Flow
@@ -105,38 +106,7 @@ internal class ProductViewModel(
         )
 
         getProductDetailsUseCase(productId).fold(
-            ifLeft = { error ->
-                when (error) {
-                    is ApiError.NotFoundError -> {
-                        _viewModelState.emit(
-                            _viewModelState.value.copy(
-                                isNotFoundError = true,
-                                isLoading = false,
-                            )
-                        )
-                    }
-
-                    is ApiError.HttpError,
-                    is ApiError.NetworkError -> {
-                        _viewModelState.emit(
-                            _viewModelState.value.copy(
-                                isApiError = true,
-                                isLoading = false,
-                            )
-                        )
-                    }
-
-                    else -> {
-                        _viewModelState.emit(
-                            _viewModelState.value.copy(
-                                isFatalError = true,
-                                isLoading = false,
-                            )
-                        )
-                    }
-                }
-
-            },
+            ifLeft = { error -> checkRepositoryErrorAndEmitEvents(error) },
             ifRight = { product ->
                 _viewModelState.emit(
                     _viewModelState.value.copy(
@@ -162,37 +132,7 @@ internal class ProductViewModel(
         )
 
         getProductListUseCase(productName).fold(
-            ifLeft = { error ->
-                when (error) {
-                    is ApiError.NotFoundError -> {
-                        _viewModelState.emit(
-                            _viewModelState.value.copy(
-                                isNotFoundError = true,
-                                isLoading = false,
-                            )
-                        )
-                    }
-
-                    is ApiError.HttpError,
-                    is ApiError.NetworkError -> {
-                        _viewModelState.emit(
-                            _viewModelState.value.copy(
-                                isApiError = true,
-                                isLoading = false,
-                            )
-                        )
-                    }
-
-                    else -> {
-                        _viewModelState.emit(
-                            _viewModelState.value.copy(
-                                isFatalError = true,
-                                isLoading = false,
-                            )
-                        )
-                    }
-                }
-            },
+            ifLeft = { error -> checkRepositoryErrorAndEmitEvents(error) },
             ifRight = { productList ->
                 _viewModelState.emit(
                     _viewModelState.value.copy(
@@ -203,6 +143,39 @@ internal class ProductViewModel(
                 )
             },
         )
+    }
+
+    private suspend fun checkRepositoryErrorAndEmitEvents(error: RepositoryError) {
+        when (error) {
+            is ApiError.NotFoundError -> {
+                _viewModelState.emit(
+                    _viewModelState.value.copy(
+                        isNotFoundError = true,
+                        isLoading = false,
+                    )
+                )
+            }
+
+            is ApiError.HttpError,
+            is ApiError.NetworkError -> {
+                _viewModelState.emit(
+                    _viewModelState.value.copy(
+                        isApiError = true,
+                        isLoading = false,
+                    )
+                )
+            }
+
+            else -> {
+                _viewModelState.emit(
+                    _viewModelState.value.copy(
+                        isFatalError = true,
+                        isLoading = false,
+                    )
+                )
+            }
+        }
+
     }
 
     private companion object {
