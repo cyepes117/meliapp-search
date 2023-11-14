@@ -1,4 +1,4 @@
-package com.example.meliapp
+package com.meliapp.search
 
 import org.junit.Test
 
