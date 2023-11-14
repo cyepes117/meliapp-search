@@ -2,7 +2,6 @@ package com.meliapp.search.data.api
 
 import arrow.core.Either
 import com.meliapp.search.data.api.dto.MultiGetResponse
-import com.meliapp.search.data.api.dto.ProductDto
 import com.meliapp.search.data.api.dto.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
