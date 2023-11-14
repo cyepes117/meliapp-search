@@ -1,6 +1,5 @@
 package com.meliapp.search.presentation
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import arrow.core.left
 import arrow.core.right
 import com.meliapp.search.data.api.ApiError
@@ -17,7 +16,6 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -25,13 +23,9 @@ import org.junit.jupiter.api.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class ProductViewModelTest {
 
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
     private lateinit var viewModel: ProductViewModel
     private lateinit var getProductListUseCase: GetProductListUseCase
     private lateinit var getProductDetailsUseCase: GetProductDetailsUseCase
-
     private val testDispatcher = StandardTestDispatcher()
     private val testCoroutineScope = TestScope(testDispatcher)
 
