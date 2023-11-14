@@ -9,6 +9,7 @@ This is a sample Android application that demonstrates the integration with Merc
 - [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html): Kotlin's native asynchronous programming library.
 - [Android Navigation Component](https://developer.android.com/guide/navigation): Navigation framework for managing navigation and deep linking.
 - [Compose](https://developer.android.com/jetpack/compose): Modern Android UI toolkit for building native UIs.
+- [Koin](https://insert-koin.io/): A pragmatic lightweight dependency injection framework for Kotlin.
 - [MockK](https://mockk.io/): Mocking library for Kotlin.
 - [Arrow](https://arrow-kt.io/): Functional programming library for Kotlin.
 - [Room](https://developer.android.com/training/data-storage/room): Android's persistence library for SQLite databases.
