@@ -1,11 +1,13 @@
 package com.meliapp.search.presentation.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,13 +26,13 @@ import com.meliapp.search.domain.entities.Product
 @Composable
 fun ProductDetail(
     product: Product,
-    onProductSelected: (Product) -> Unit,
+    onBuyClicked: () -> Unit,
+    onContactClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onProductSelected(product) }
             .background(Color.White)
     ) {
         AsyncImage(
@@ -53,17 +55,47 @@ fun ProductDetail(
         ) {
             Text(
                 text = product.title,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
                 text = product.thumbnail,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
                 text = "Price: $${product.price}",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = { onBuyClicked() },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(48.dp)
+                        .padding(end = 8.dp)
+                ) {
+                    Text(text = "Buy")
+                }
+
+                Button(
+                    onClick = { onContactClicked() },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(48.dp)
+                        .padding(start = 8.dp)
+                ) {
+                    Text(text = "Contact")
+                }
+            }
         }
     }
 }
@@ -72,7 +104,14 @@ fun ProductDetail(
 @Composable
 fun ProductDetailPreview() {
     ProductDetail(
-        product = Product(id = "1", title = "Product 1", thumbnail = "https://http2.mlstatic.com/D_705584-MLA45585289613_042021-I.jpg", price = 20.0),
-        onProductSelected = {}
+        product = Product(
+            id = "1",
+            title = "Product 1",
+            thumbnail = "https://http2.mlstatic.com/D_705584-MLA45585289613_042021-I.jpg",
+            price = 20.0
+        ),
+        onBuyClicked = {},
+        onContactClicked = {}
     )
 }
+
