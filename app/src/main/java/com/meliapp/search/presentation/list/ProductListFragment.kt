@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.meliapp.search.presentation.ProductEventRouter
 import kotlinx.coroutines.CoroutineScope
@@ -26,8 +27,8 @@ class ProductListFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 ProductListFragmentContent(
-                    query = viewModel.viewModelState.collectAsState().value.query,
-                    products = viewModel.viewModelState.collectAsState().value.results,
+                    query = viewModel.viewModelState.collectAsStateWithLifecycle().value.query,
+                    products = viewModel.viewModelState.collectAsStateWithLifecycle().value.results,
                     onProductSelected = { product ->
                         viewModel.publishViewEvent(
                             ProductEventRouter.ViewEvent.ProductList.SelectProduct(product = product)
@@ -41,10 +42,10 @@ class ProductListFragment : Fragment() {
                             ProductEventRouter.ViewEvent.ProductList.Clear
                         )
                     },
-                    isLoading = viewModel.viewModelState.collectAsState().value.isLoading,
-                    isApiError = viewModel.viewModelState.collectAsState().value.isApiError,
-                    isNotFoundError = viewModel.viewModelState.collectAsState().value.isNotFoundError,
-                    isFatalError = viewModel.viewModelState.collectAsState().value.isFatalError,
+                    isLoading = viewModel.viewModelState.collectAsStateWithLifecycle().value.isLoading,
+                    isApiError = viewModel.viewModelState.collectAsStateWithLifecycle().value.isApiError,
+                    isNotFoundError = viewModel.viewModelState.collectAsStateWithLifecycle().value.isNotFoundError,
+                    isFatalError = viewModel.viewModelState.collectAsStateWithLifecycle().value.isFatalError,
                 )
             }
         }

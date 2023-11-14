@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.meliapp.search.presentation.ProductEventRouter
 import org.koin.android.ext.android.get
 
@@ -22,7 +22,7 @@ class ProductDetailFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 ProductDetail(
-                    product = viewModel.viewModelState.collectAsState().value.selectedResult!!,
+                    product = viewModel.viewModelState.collectAsStateWithLifecycle().value.selectedResult!!,
                     onProductSelected = {},
                 )
             }
